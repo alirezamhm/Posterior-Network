@@ -30,7 +30,7 @@ def compute_loss_accuracy(model, loader):
 
 
 # Joint training for full model
-def train(model, train_loader, val_loader, max_epochs=200, frequency=2, patience=5, model_path='saved_model', full_config_dict={}):
+def train(model, train_loader, val_loader, max_epochs=200, frequency=2, patience=5, model_path='saved_model', full_config_dict={}, logger=None):
     model.to(device)
     model.train()
     train_losses, val_losses, train_accuracies, val_accuracies = [], [], [], []
@@ -43,17 +43,24 @@ def train(model, train_loader, val_loader, max_epochs=200, frequency=2, patience
             X_train, Y_train_hot = X_train.to(device), Y_train_hot.to(device)
             model(X_train, Y_train_hot)
             model.step()
+        
 
         if epoch % frequency == 0:
             # Stats on data sets
-            # train_loss, train_accuracy = compute_loss_accuracy(model, train_loader)
-            # train_losses.append(round(train_loss, 3))
-            # train_accuracies.append(round(train_accuracy, 3))
+            train_loss, train_accuracy = compute_loss_accuracy(model, train_loader)
+            train_losses.append(round(train_loss, 3))
+            train_accuracies.append(round(train_accuracy, 3))
 
             val_loss, val_accuracy = compute_loss_accuracy(model, val_loader)
             val_losses.append(val_loss)
             val_accuracies.append(val_accuracy)
-
+            
+            if logger:
+                logger.log({"train_loss": train_loss,
+                            "train_accuracy": train_accuracy,
+                            "val_loss": val_loss,
+                            "val_accuracy": val_accuracy}, 
+                            step=epoch+1)
             print("Epoch {} -> Val loss {} | Val Acc.: {}".format(epoch, round(val_losses[-1], 3), round(val_accuracies[-1], 3)))
 
             if val_losses[-1] < -1.:
@@ -77,7 +84,7 @@ def train(model, train_loader, val_loader, max_epochs=200, frequency=2, patience
 
 
 # Joint training method for ablated model
-def train_sequential(model, train_loader, val_loader, max_epochs=200, frequency=2, patience=5, model_path='saved_model', full_config_dict={}):
+def train_sequential(model, train_loader, val_loader, max_epochs=200, frequency=2, patience=5, model_path='saved_model', full_config_dict={}, logger=None):
     loss_1 = 'CE'
     loss_2 = model.loss
 
@@ -91,7 +98,8 @@ def train_sequential(model, train_loader, val_loader, max_epochs=200, frequency=
                                                                                frequency=frequency,
                                                                                patience=patience,
                                                                                model_path=model_path,
-                                                                               full_config_dict=full_config_dict)
+                                                                               full_config_dict=full_config_dict,
+                                                                               logger=logger)
     print("### Normalizing Flow training ###")
     model.load_state_dict(torch.load(f'{model_path}')['model_state_dict'])
     for param in model.sequential.parameters():
@@ -105,7 +113,8 @@ def train_sequential(model, train_loader, val_loader, max_epochs=200, frequency=
                                                                                frequency=frequency,
                                                                                patience=patience,
                                                                                model_path=model_path,
-                                                                               full_config_dict=full_config_dict)
+                                                                               full_config_dict=full_config_dict,
+                                                                               logger=logger)
 
     return train_losses_1 + train_losses_2, \
            val_losses_1 + val_losses_2, \

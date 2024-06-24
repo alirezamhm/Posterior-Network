@@ -43,7 +43,11 @@ def run(
         lr,  # Learning rate. float
         loss,  # Loss name. string
         training_mode,  # 'joint' or 'sequential' training. string
-        regr):  # Regularization factor in Bayesian loss. float
+        regr, # Regularization factor in Bayesian loss. float
+        
+        # Logger
+        logger,
+        ):  
 
     logging.info('Received the following configuration:')
     logging.info(f'DATASET | '
@@ -144,7 +148,8 @@ def run(
                                                                       frequency=frequency,
                                                                       patience=patience,
                                                                       model_path=model_path,
-                                                                      full_config_dict=full_config_dict)
+                                                                      full_config_dict=full_config_dict,
+                                                                      logger=logger)
     elif training_mode == 'sequential':
         assert not no_density
         train_losses, val_losses, train_accuracies, val_accuracies = train_sequential(model,
