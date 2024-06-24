@@ -56,11 +56,11 @@ def train(model, train_loader, val_loader, max_epochs=200, frequency=2, patience
             val_accuracies.append(val_accuracy)
             
             if logger:
-                logger.log({"train_loss": train_loss,
-                            "train_accuracy": train_accuracy,
-                            "val_loss": val_loss,
-                            "val_accuracy": val_accuracy}, 
-                            step=epoch+1)
+                logger.log_dict({"train_loss": train_loss,
+                                "train_accuracy": train_accuracy,
+                                "val_loss": val_loss,
+                                "val_accuracy": val_accuracy}, 
+                                step=epoch+1)
             print("Epoch {} -> Val loss {} | Val Acc.: {}".format(epoch, round(val_losses[-1], 3), round(val_accuracies[-1], 3)))
 
             if val_losses[-1] < -1.:
