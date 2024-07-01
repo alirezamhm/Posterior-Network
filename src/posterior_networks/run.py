@@ -18,7 +18,7 @@ def run(
         split,  # Split for train/val/test sets. list of floats
         transform_min,  # Minimum value for rescaling input data. float
         transform_max,  # Maximum value for rescaling input data. float
-
+        num_workers,
         # Architecture parameters
         seed_model,  # Seed to init model. int
         directory_model,  # Path to save model. string
@@ -87,7 +87,7 @@ def run(
                                     input_dims=input_dims, output_dim=output_dim,
                                     transform_min=transform_min, transform_max=transform_max,
                                     seed=seed_dataset)
-    train_loader, val_loader, test_loader, N = dataset.split(batch_size=batch_size, split=split, num_workers=4)
+    train_loader, val_loader, test_loader, N = dataset.split(batch_size=batch_size, split=split, num_workers=num_workers)
 
     #################
     ## Train model ##
@@ -172,12 +172,12 @@ def run(
                                         input_dims=input_dims, output_dim=output_dim,
                                         transform_min=transform_min, transform_max=transform_max,
                                         seed=None)
-        ood_dataset_loaders[ood_dataset_name] = torch.utils.data.DataLoader(dataset, batch_size=2 * batch_size, num_workers=4, pin_memory=True)
+        ood_dataset_loaders[ood_dataset_name] = torch.utils.data.DataLoader(dataset, batch_size=2 * batch_size, num_workers=num_workers, pin_memory=True)
         if unscaled_ood:
             dataset = ClassificationDataset(f'{directory_dataset}/{ood_dataset_name}.csv',
                                             input_dims=input_dims, output_dim=output_dim,
                                             seed=None)
-            ood_dataset_loaders[ood_dataset_name + '_unscaled'] = torch.utils.data.DataLoader(dataset, batch_size=2 * batch_size, num_workers=4, pin_memory=True)
+            ood_dataset_loaders[ood_dataset_name + '_unscaled'] = torch.utils.data.DataLoader(dataset, batch_size=2 * batch_size, num_workers=num_workers, pin_memory=True)
     result_path = f'{directory_results}/results-dpn-{full_config_name}'
     model.load_state_dict(torch.load(f'{model_path}')['model_state_dict'])
     metrics = test(model, test_loader, ood_dataset_loaders, result_path)

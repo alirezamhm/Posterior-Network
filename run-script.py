@@ -17,6 +17,7 @@ unscaled_ood=True
 split=[.6, .8]
 transform_min=0.
 transform_max=255.
+num_workers=8
 
 # Architecture parameters
 seed_model=123
@@ -55,6 +56,7 @@ logger = WandBLogger(project="posterior-network", config={
         "architecture": architecture,
         "density_type": density_type,
         "regr": regr,
+        "num_workers": num_workers,
 })
 
 
@@ -67,6 +69,7 @@ results_metrics = run(# Dataset parameters
                         split,  # Split for train/val/test sets. list of floats
                         transform_min,  # Minimum value for rescaling input data. float
                         transform_max,  # Maximum value for rescaling input data. float
+                        num_workers,
 
                         # Architecture parameters
                         seed_model,  # Seed to init model. int

@@ -1,5 +1,4 @@
 data/
-saved_models/
 saved_results/
 *.out
 wandb/
