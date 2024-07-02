@@ -83,7 +83,6 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 */.ipynb_checkpoints
-notebooks/.ipynb_checkpoints/train-CIFAR10-checkpoint.ipynb
 
 # IPython
 profile_default/
