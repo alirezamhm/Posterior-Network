@@ -134,7 +134,9 @@ def run(
                         'lr': lr,
                         'loss': loss,
                         'training_mode': training_mode,
-                        'regr': regr}
+                        'regr': regr,
+                        'num_workers': num_workers,
+                        }
     full_config_name = ''
     for k, v in full_config_dict.items():
         full_config_name += str(v) + '-'
