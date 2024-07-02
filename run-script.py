@@ -11,8 +11,8 @@ from src.posterior_networks.run import run
 # Dataset parameters
 seed_dataset=123
 directory_dataset='./data'
-dataset_name='CIFAR10'
-ood_dataset_names=['SVHN']
+dataset_name='MNIST'
+ood_dataset_names=['KMNIST', 'FashionMNIST']
 unscaled_ood=True
 split=[.6, .8]
 transform_min=0.
@@ -23,7 +23,7 @@ num_workers=8
 seed_model=123
 directory_model='./saved_models'
 architecture='conv'
-input_dims=[32, 32, 3]
+input_dims=[28, 28, 1]
 output_dim=10
 hidden_dims=[64, 64, 64]
 kernel_dim=5
@@ -37,7 +37,7 @@ budget_function='id'
 # Training parameters
 directory_results='./saved_results'
 max_epochs=200
-patience=10
+patience=100
 frequency=2
 batch_size=64
 lr=5e-4
@@ -49,6 +49,7 @@ regr=1e-5
 logger = WandBLogger(project="posterior-network", config={
         "learning_rate": lr,
         "epochs": max_epochs,
+        "patience": patience,
         "batch_size": batch_size,
         "loss_function": loss,
         "dataset": dataset_name,
