@@ -47,17 +47,16 @@ def train(model, train_loader, val_loader, max_epochs=200, frequency=2, patience
 
         if epoch % frequency == 0:
             # Stats on data sets
-            train_loss, train_accuracy = compute_loss_accuracy(model, train_loader)
-            train_losses.append(round(train_loss, 3))
-            train_accuracies.append(round(train_accuracy, 3))
+            # train_loss, train_accuracy = compute_loss_accuracy(model, train_loader)
+            # train_losses.append(round(train_loss, 3))
+            # train_accuracies.append(round(train_accuracy, 3))
 
             val_loss, val_accuracy = compute_loss_accuracy(model, val_loader)
             val_losses.append(val_loss)
             val_accuracies.append(val_accuracy)
             
             if logger:
-                logger.log_dict({"train_loss": train_loss,
-                                "train_accuracy": train_accuracy,
+                logger.log_dict({
                                 "val_loss": val_loss,
                                 "val_accuracy": val_accuracy}, 
                                 step=epoch+1)

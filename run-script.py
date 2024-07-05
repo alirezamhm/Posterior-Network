@@ -11,19 +11,19 @@ from src.posterior_networks.run import run
 # Dataset parameters
 seed_dataset=123
 directory_dataset='./data'
-dataset_name='MNIST'
-ood_dataset_names=['KMNIST', 'FashionMNIST']
+dataset_name='CIFAR10'
+ood_dataset_names=['SVHN']
 unscaled_ood=True
 split=[.6, .8]
 transform_min=0.
 transform_max=255.
-num_workers=8
+num_workers=12
 
 # Architecture parameters
 seed_model=123
 directory_model='./saved_models'
-architecture='conv'
-input_dims=[28, 28, 1]
+architecture='resnet'
+input_dims=[32, 32, 3]
 output_dim=10
 hidden_dims=[64, 64, 64]
 kernel_dim=5
@@ -37,13 +37,16 @@ budget_function='id'
 # Training parameters
 directory_results='./saved_results'
 max_epochs=200
-patience=100
+patience=20
 frequency=2
-batch_size=64
+batch_size=256
 lr=5e-4
 loss='UCE'
 training_mode='joint'
 regr=1e-5
+
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print(f"device: {device}")
 
 
 logger = WandBLogger(project="posterior-network", config={
@@ -98,6 +101,7 @@ results_metrics = run(# Dataset parameters
                         training_mode,  # 'joint' or 'sequential' training. string
                         regr,
                         logger = logger,
+                        device=device
                         )
 
 print(results_metrics['model_path'])

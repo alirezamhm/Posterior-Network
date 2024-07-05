@@ -47,6 +47,7 @@ def run(
         
         # Logger
         logger,
+        device,
         ):  
 
     logging.info('Received the following configuration:')
@@ -109,6 +110,7 @@ def run(
                              loss=loss,
                              regr=regr,
                              seed=seed_model)
+    model = model.to(device)
     full_config_dict = {'seed_dataset': seed_dataset,
                         'dataset_name': dataset_name,
                         'split': split,
