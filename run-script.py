@@ -17,18 +17,18 @@ unscaled_ood=True
 split=[.6, .8]
 transform_min=0.
 transform_max=255.
-num_workers=12
+num_workers=8
 
 # Architecture parameters
 seed_model=123
 directory_model='./saved_models'
-architecture='resnet'
+architecture='alexnet'
 input_dims=[32, 32, 3]
 output_dim=10
 hidden_dims=[64, 64, 64]
 kernel_dim=5
 latent_dim=6
-no_density=False
+no_density=True
 density_type='radial_flow'
 n_density=6
 k_lipschitz=None
@@ -41,7 +41,7 @@ patience=20
 frequency=2
 batch_size=256
 lr=5e-4
-loss='UCE'
+loss='CE'
 training_mode='joint'
 regr=1e-5
 
@@ -59,6 +59,7 @@ logger = WandBLogger(project="posterior-network", config={
         "dataset_ood": ood_dataset_names,
         "architecture": architecture,
         "density_type": density_type,
+        "no_density": no_density,
         "regr": regr,
         "num_workers": num_workers,
 })
@@ -100,7 +101,7 @@ results_metrics = run(# Dataset parameters
                         loss,  # Loss name. string
                         training_mode,  # 'joint' or 'sequential' training. string
                         regr,
-                        logger = logger,
+                        logger=logger,
                         device=device
                         )
 
