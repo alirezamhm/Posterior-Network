@@ -16,14 +16,14 @@ np.random.seed(1)
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(f"device: {device}")
-num_workers = 8 
+num_workers = 4
 
 if __name__=='__main__':
-    name = 'alexnet_baseline'
+    name = 'resnet_baseline'
     # Load model
     seed_model=123
     directory_model='./saved_models'
-    architecture='alexnet'
+    architecture='resnet'
     input_dims=[32, 32, 3]
     output_dim=10
     hidden_dims=[64, 64, 64]
@@ -59,7 +59,7 @@ if __name__=='__main__':
                             regr=regr,
                             seed=seed_model)
 
-    model_path = './saved_models/model-dpn-123-CIFAR10-[0.6, 0.8]-0.0-255.0-123-alexnet-[32, 32, 3]-10-[64, 64, 64]-5-6-True-radial_flow-6-None-id-200-20-2-256-0.0005-CE-joint-1e-05-8'
+    model_path = './saved_models/model-dpn-123-CIFAR10-[0.6, 0.8]-0.0-255.0-123-resnet-[32, 32, 3]-10-[64, 64, 64]-5-6-True-radial_flow-6-None-id-200-20-2-256-0.0005-CE-joint-1e-05-8'
     model.load_state_dict(torch.load(model_path, map_location=device)['model_state_dict'])
     model.to(device)
 
@@ -72,7 +72,7 @@ if __name__=='__main__':
                     'jpeg_compression','fog','frost','defocus_blur'
     ]
 
-    transform = trn.Compose([trn.ToTensor(), trn.Normalize(0, 255)])
+    transform = trn.Compose([trn.ToTensor()])
 
     # Evaluation
     model.eval()

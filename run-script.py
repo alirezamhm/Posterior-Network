@@ -17,12 +17,12 @@ unscaled_ood=True
 split=[.6, .8]
 transform_min=0.
 transform_max=255.
-num_workers=8
+num_workers=4
 
 # Architecture parameters
 seed_model=123
 directory_model='./saved_models'
-architecture='alexnet'
+architecture='vgg'
 input_dims=[32, 32, 3]
 output_dim=10
 hidden_dims=[64, 64, 64]

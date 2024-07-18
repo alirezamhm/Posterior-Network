@@ -1,9 +1,8 @@
 #!/bin/bash -l
 #SBATCH --time=12:00:00
-#SBATCH --mem=12GB
-#SBATCH --partition=gpu-v100-16g
+#SBATCH --mem=6GB
 #SBATCH --gpus=1
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=4
 #SBATCH --output=.out/train.out
 #SBATCH --error=.out/error.out
 
